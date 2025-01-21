@@ -1,0 +1,45 @@
+{
+    "address": "AsBfva8FVsE3CUJzahF8txqt8TKxN3thejDfWzwjuDx3",
+    "metadata": {
+      "name": "sol_staking",
+      "version": "0.1.0",
+      "spec": "0.1.0",
+      "description": "Created with Anchor"
+    },
+    "instructions": [
+      {
+        "name": "send_sol",
+        "discriminator": [
+          214,
+          24,
+          219,
+          18,
+          3,
+          205,
+          201,
+          179
+        ],
+        "accounts": [
+          {
+            "name": "recipient",
+            "writable": true
+          },
+          {
+            "name": "system_program",
+            "address": "11111111111111111111111111111111"
+          },
+          {
+            "name": "signer",
+            "writable": true,
+            "signer": true
+          }
+        ],
+        "args": [
+          {
+            "name": "amount",
+            "type": "u64"
+          }
+        ]
+      }
+    ]
+  }

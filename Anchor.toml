@@ -12,7 +12,7 @@ sendsol_solana = "AsBfva8FVsE3CUJzahF8txqt8TKxN3thejDfWzwjuDx3"
 url = "https://api.apr.dev"
 
 [provider]
-cluster = "Localnet"
+cluster = "devnet"
 wallet = "~/.config/solana/id.json"
 
 [scripts]
