@@ -13,8 +13,10 @@ export default function Sendsol() {
   
   const { connected, select, publicKey } = useWallet()
   const { connection } = useConnection();
-  const [value,setvalue] = useState(0);
-  const [recipientaddress,setrecipientaddress] = useState("");
+  const [value, setvalue] = useState(0);
+  const [usrbalance, setusrbalance] = useState(0);
+  const [recipientaddress, setrecipientaddress] = useState("");
+  const [recipientbal, setrecipientbal] = useState(0);
   const wallet = useAnchorWallet();
 
   const onConnect = () => {
@@ -26,14 +28,20 @@ export default function Sendsol() {
     setvalue(e.target.value)
   }
 
-  useEffect(() => {
+  const getreceipientbal = async(e:any) => {
+    e.preventDefault()
+    setrecipientaddress(e.target.value)
+    const publicKeyreceipt = new solanaWeb3.PublicKey(e.target.value);
+    const balance = await connection.getBalance(publicKeyreceipt);
+    setrecipientbal(balance/solanaWeb3.LAMPORTS_PER_SOL);
+  }
 
+
+  useEffect(() => {
     const getbalance = async() => {
       if(wallet) {
-        console.log(solanaWeb3.LAMPORTS_PER_SOL);
         const balance = await connection.getBalance(wallet.publicKey);
-        console.log("balac",balance/solanaWeb3.LAMPORTS_PER_SOL);
-        
+        setusrbalance(balance/solanaWeb3.LAMPORTS_PER_SOL)
       }
     }
     getbalance()
@@ -65,6 +73,15 @@ export default function Sendsol() {
           </button>
           <div className="collapse navbar-collapse" id="navbarNav">
             <ul className="navbar-nav ms-auto">
+              <li className='nav-item mx-lg-3 mt-lg-2'>
+                {
+                  connected ? <>
+                    <div>Balance : {usrbalance} Sol</div>
+                  </>:<>
+                    <div></div>
+                  </>
+                }
+              </li>
               <li className="nav-item">{
                   connected ? <>
                   <button className="btn btn-primary">{publicKey?.toBase58()}</button>
@@ -78,13 +95,13 @@ export default function Sendsol() {
         </div>
       </nav>
 
-      <div className='container'>
+      <div className='container mt-lg-4'>
           <div className='text-center'>
             <h4>Solana send app</h4>
           </div>
         <div className='inputbox'>
            <div className='mb-3 mt-3 inputpanel'>
-              <label  className="form-label">Recipient address</label>
+              <label  className="form-label">Enter Sol</label>
               <input type="text" 
                 className="form-control" 
                 id="exampleFormControlInput1" 
@@ -94,12 +111,21 @@ export default function Sendsol() {
                 />
            </div>
            <div className='mb-3 inputpanel'>
-              <label  className="form-label">Enter Sol</label>
+              <label  className="form-label">Recipient address</label>
               <input type="text" className="form-control" 
                 id="exampleFormControlInput1" 
                 placeholder=""
                 value={recipientaddress}
-                onChange={e => setrecipientaddress(e.target.value)}
+                onChange={e => getreceipientbal(e)}
+                />
+           </div>
+           <div className='mb-3 inputpanel'>
+              <label  className="form-label">Recipient Balance</label>
+              <input  className="form-control" 
+                id="exampleFormControlInput1" 
+                placeholder=""
+                value={recipientbal}
+                readOnly
                 />
            </div>
             <div className='mt-4 counterbutton'>
